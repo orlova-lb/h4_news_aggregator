@@ -23,7 +23,7 @@ class BaseAPIProcessor:
             return False
 
         try:
-            clean_data = self._clean_data(raw_data=new_data)
+            clean_data = self._clean_news(raw_news=new_data)
         except Exception as e:
             self.log.error(f'refresh_data - '
                            f'failed to clean data: '
@@ -31,7 +31,7 @@ class BaseAPIProcessor:
             return False
 
         try:
-            self._save_data(data_to_save=clean_data)
+            self._save_news(data_to_save=clean_data)
         except Exception as e:
             self.log.error(f'refresh_data - '
                            f'failed to save data: '
@@ -39,6 +39,13 @@ class BaseAPIProcessor:
             return False
         self.log.info(f'refresh_data - '
                       f'Done')
+        try:
+            self._save_tags(data_to_save=clean_data)
+        except Exception as e:
+            self.log.error(f'refresh_data - '
+                           f'failed to save tags: '
+                           f'{e}')
+            return False
         return True
 
     def _get_data(self):
@@ -60,10 +67,16 @@ class BaseAPIProcessor:
 
         return response.json()
 
-    def _clean_data(self, raw_data):
+    def _clean_news(self, raw_news):
         raise NotImplementedError
 
-    def _save_data(self, data_to_save):
+    def _save_news(self, data_to_save):
+        raise NotImplementedError
+
+    def _clean_tags(self, raw_news):
+        raise NotImplementedError
+
+    def _save_tags(self, data_to_save):
         raise NotImplementedError
 
 
