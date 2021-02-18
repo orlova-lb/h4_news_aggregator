@@ -34,5 +34,9 @@ def _serialize_to_json(data):
     """
     raw_data = json.loads(serializers.serialize('json', data))
     # TODO: add dicts reformatting
+    raw_data = list()
+    for item in raw_data:
+        item_dict = {'id': item['pk']}
+        item_dict.update(item)
+        raw_data.append(item_dict)
     return raw_data
-
